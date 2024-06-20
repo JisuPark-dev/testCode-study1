@@ -18,13 +18,11 @@ public class ProductService {
 
     public ProductResponse createProduct(ProductCreateRequest request) {
         String nextProductNumber = createNextProductNumber();
-        return ProductResponse.builder()
-                .productNumber(nextProductNumber)
-                .name(request.getName())
-                .type(request.getType())
-                .price(request.getPrice())
-                .sellingStatus(request.getSellingStatus())
-                .build();
+
+        Product product = request.toEntity(nextProductNumber);
+        Product savedProduct = productRepository.save(product);
+
+        return ProductResponse.of(savedProduct);
     }
 
     public List<ProductResponse> getSellingProducts() {

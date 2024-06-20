@@ -16,7 +16,7 @@ import sample.testcode.spring.domain.product.ProductType;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.groups.Tuple.tuple;
 import static sample.testcode.spring.domain.product.ProductSellingStatus.*;
 import static sample.testcode.spring.domain.product.ProductType.HANDMADE;
 
@@ -50,7 +50,13 @@ class ProductServiceTest {
         assertThat(productResponse)
                 .extracting("name","price","sellingStatus","type", "productNumber")
                 .containsExactlyInAnyOrder("신규상품", 10000, SELLING, HANDMADE, "001");
-        
+
+        List<Product> all = productRepository.findAll();
+        assertThat(all).hasSize(1)
+                .extracting("name","price","sellingStatus","type", "productNumber")
+                .containsExactlyInAnyOrder(
+                        tuple("신규상품", 10000, SELLING, HANDMADE, "001")
+                );
     }
 
     @DisplayName("신규상품을 등록할 때, 상품번호가 가장 최근 상품번호 + 1로 만들어진다.")
@@ -73,6 +79,14 @@ class ProductServiceTest {
         assertThat(productResponse)
                 .extracting("name","price","sellingStatus","type", "productNumber")
                 .containsExactlyInAnyOrder("신규상품", 10000, SELLING, HANDMADE, "002");
+
+        List<Product> all = productRepository.findAll();
+        assertThat(all).hasSize(2)
+                .extracting("name","price","sellingStatus","type", "productNumber")
+                .containsExactlyInAnyOrder(
+                        tuple("신규상품", 10000, SELLING, HANDMADE, "002"),
+                        tuple("아메리카노", 4000, SELLING, HANDMADE, "001")
+                );
     }
 
     private Product createProduct(String productNumber, ProductType productType, ProductSellingStatus sellingStatus, String name, int price) {
