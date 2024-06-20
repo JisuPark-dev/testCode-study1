@@ -17,10 +17,9 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public ProductResponse createProduct(ProductCreateRequest request) {
-        System.out.println("test");
-        String latestProductNumber = productRepository.findLatestProductNumber();
+        String nextProductNumber = createNextProductNumber();
         return ProductResponse.builder()
-                .productNumber(latestProductNumber)
+                .productNumber(nextProductNumber)
                 .name(request.getName())
                 .type(request.getType())
                 .price(request.getPrice())
@@ -35,5 +34,16 @@ public class ProductService {
                 .collect(Collectors.toList());
 
 
+    }
+
+    private String createNextProductNumber() {
+        String latestProductNumber = productRepository.findLatestProductNumber();
+        if(latestProductNumber == null) {
+            return "001";
+        }else{
+            Integer latestProductNumberInt = Integer.valueOf(latestProductNumber);
+            int NextProductNumberInt = latestProductNumberInt + 1;
+            return String.format("%03d", NextProductNumberInt);
+        }
     }
 }

@@ -1,9 +1,11 @@
 package sample.testcode.spring.api.service.product;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import sample.testcode.spring.api.controller.product.dto.ProductCreateRequest;
 import sample.testcode.spring.api.service.product.response.ProductResponse;
 import sample.testcode.spring.domain.product.Product;
@@ -19,21 +21,35 @@ import static sample.testcode.spring.domain.product.ProductSellingStatus.*;
 import static sample.testcode.spring.domain.product.ProductType.HANDMADE;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class ProductServiceTest {
     @Autowired
     private ProductService productService;
 
     @Autowired
     private ProductRepository productRepository;
+
+    @AfterEach
+    void tearDown() { // tearDown = 구조물의 해체, 혹은 철거를 뜻한다.
+        productRepository.deleteAllInBatch();
+    }
     
     @DisplayName("상품이 아무것도 없을 때, 상품이 상품번호 001로 잘 만들어진다.")
     @Test
     void createProductNumberWhenProductIsEmpty(){
-        //given
-        
+        ProductCreateRequest request = ProductCreateRequest.builder()
+                .name("신규상품")
+                .price(10000)
+                .sellingStatus(SELLING)
+                .type(HANDMADE)
+                .build();
         //when
-        
+        ProductResponse productResponse = productService.createProduct(request);
+
         //then
+        assertThat(productResponse)
+                .extracting("name","price","sellingStatus","type", "productNumber")
+                .containsExactlyInAnyOrder("신규상품", 10000, SELLING, HANDMADE, "001");
         
     }
 
