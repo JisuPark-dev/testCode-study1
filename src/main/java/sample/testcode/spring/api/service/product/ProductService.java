@@ -17,6 +17,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public ProductResponse createProduct(ProductCreateRequest request) {
+        System.out.println("test");
         String latestProductNumber = productRepository.findLatestProductNumber();
         return ProductResponse.builder()
                 .productNumber(latestProductNumber)
