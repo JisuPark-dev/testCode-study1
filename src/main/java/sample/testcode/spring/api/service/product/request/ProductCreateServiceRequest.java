@@ -1,4 +1,4 @@
-package sample.testcode.spring.api.controller.product.dto;
+package sample.testcode.spring.api.service.product.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -6,29 +6,35 @@ import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sample.testcode.spring.api.controller.product.dto.ProductCreateRequest;
 import sample.testcode.spring.domain.product.Product;
 import sample.testcode.spring.domain.product.ProductSellingStatus;
 import sample.testcode.spring.domain.product.ProductType;
 
 @Getter
 @NoArgsConstructor
-public class ProductCreateRequest {
+public class ProductCreateServiceRequest {
 
-    @NotNull(message = "상품 타입은 필수입니다.")
     private ProductType type;
-    @NotNull(message = "상품 판매상태는 필수입니다.")
     private ProductSellingStatus sellingStatus;
-    @NotBlank(message = "상품 이름은 필수입니다.")
     private String name;
-    @Positive(message = "상품 가격은 양수입니다.")
     private int price;
 
     @Builder
-    public ProductCreateRequest(ProductType type, ProductSellingStatus sellingStatus, String name, int price) {
+    private ProductCreateServiceRequest(ProductType type, ProductSellingStatus sellingStatus, String name, int price) {
         this.type = type;
         this.sellingStatus = sellingStatus;
         this.name = name;
         this.price = price;
+    }
+
+    public static ProductCreateServiceRequest toServiceRequest(ProductCreateRequest productCreateRequest) {
+        return ProductCreateServiceRequest.builder()
+                .type(productCreateRequest.getType())
+                .sellingStatus(productCreateRequest.getSellingStatus())
+                .name(productCreateRequest.getName())
+                .price(productCreateRequest.getPrice())
+                .build();
     }
 
     public Product toEntity(String nextProductNumber) {

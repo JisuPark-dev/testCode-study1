@@ -5,6 +5,7 @@ import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sample.testcode.spring.api.controller.order.request.OrderCreateRequest;
+import sample.testcode.spring.api.service.order.request.OrderCreateServiceRequest;
 import sample.testcode.spring.api.service.order.response.OrderResponse;
 import sample.testcode.spring.domain.order.Order;
 import sample.testcode.spring.domain.order.OrderRepository;
@@ -29,7 +30,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final StockRepository stockRepository;
 
-    public OrderResponse createOrder(OrderCreateRequest request, LocalDateTime now) {
+    public OrderResponse createOrder(OrderCreateServiceRequest request, LocalDateTime now) {
         List<String> productNumbers = request.getProductNumbers();
         // 중복을 고려한 Product
         List<Product> duplicateProducts = findProductsBy(productNumbers);

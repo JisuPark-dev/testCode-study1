@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import sample.testcode.spring.api.controller.order.request.OrderCreateRequest;
+import sample.testcode.spring.api.service.order.request.OrderCreateServiceRequest;
 import sample.testcode.spring.api.service.order.response.OrderResponse;
 import sample.testcode.spring.domain.order.OrderRepository;
 import sample.testcode.spring.domain.orderProduct.OrderProductRepository;
@@ -69,7 +70,7 @@ class OrderServiceTest {
 
         LocalDateTime now = LocalDateTime.now();
         //when
-        OrderResponse orderResponse = orderService.createOrder(request, now);
+        OrderResponse orderResponse = orderService.createOrder(OrderCreateServiceRequest.toServiceRequest(request), now);
 
         //then
         assertThat(orderResponse.getId()).isNotNull();
@@ -100,7 +101,7 @@ class OrderServiceTest {
 
         LocalDateTime now = LocalDateTime.now();
         //when
-        OrderResponse orderResponse = orderService.createOrder(request, now);
+        OrderResponse orderResponse = orderService.createOrder(OrderCreateServiceRequest.toServiceRequest(request), now);
 
         //then
         assertThat(orderResponse.getId()).isNotNull();
@@ -136,7 +137,7 @@ class OrderServiceTest {
 
         LocalDateTime now = LocalDateTime.now();
         //when
-        OrderResponse orderResponse = orderService.createOrder(request, now);
+        OrderResponse orderResponse = orderService.createOrder(OrderCreateServiceRequest.toServiceRequest(request), now);
 
         //then
         assertThat(orderResponse.getId()).isNotNull();
@@ -179,7 +180,7 @@ class OrderServiceTest {
 
         LocalDateTime now = LocalDateTime.now();
         //when
-        assertThatThrownBy(() -> orderService.createOrder(request, now))
+        assertThatThrownBy(() -> orderService.createOrder(OrderCreateServiceRequest.toServiceRequest(request), now))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

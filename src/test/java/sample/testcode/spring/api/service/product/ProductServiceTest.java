@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import sample.testcode.spring.api.controller.product.dto.ProductCreateRequest;
+import sample.testcode.spring.api.service.product.request.ProductCreateServiceRequest;
 import sample.testcode.spring.api.service.product.response.ProductResponse;
 import sample.testcode.spring.domain.product.Product;
 import sample.testcode.spring.domain.product.ProductRepository;
@@ -44,7 +45,7 @@ class ProductServiceTest {
                 .type(HANDMADE)
                 .build();
         //when
-        ProductResponse productResponse = productService.createProduct(request);
+        ProductResponse productResponse = productService.createProduct(ProductCreateServiceRequest.toServiceRequest(request));
 
         //then
         assertThat(productResponse)
@@ -73,7 +74,7 @@ class ProductServiceTest {
                 .type(HANDMADE)
                 .build();
         //when
-        ProductResponse productResponse = productService.createProduct(request);
+        ProductResponse productResponse = productService.createProduct(ProductCreateServiceRequest.toServiceRequest(request));
 
         //then
         assertThat(productResponse)
